@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name = "Author" content= "David Barker"/>
+
+    <!--  Please ensure your security is proper before implementing this, I do not claim mine is.-->
+
+  <style>
+
+  /* Add some styling to make the page look nice */
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+
+  form {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  /* NOT USED CURRENTLY */
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+  }
+
+  /* this is the submit button only */
+  input[type="submit"] {
+    background-color: #000000;
+    color: white;
+    padding: 20px 40px;
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  /* Add hover effect for the button */
+  /* this is the submit button only */
+  input[type="submit"]:hover {
+    background-color: white;
+    color: black;
+  }
+
+  /* Add styling for the new buttons */
+  /* buttons are login and register */
+  input[type="button"] {
+    background-color: #000000;
+    padding-top: 10px;
+    color: white;
+    padding: 15px 30px;
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 45%;
+    margin-bottom: 20px;
+    float: center;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  /* Add hover effect for the new buttons */
+  /* buttons are login and register */
+  input[type="button"]:hover {
+    background-color: white;
+    color: black;
+  </style>
+</head>
+<body>
+<!--  The popup from register():
+        PS IT DOES NOT WORK-->
+  {% if error %}
+    <script>alert("{{ error }}");</script>
+  {% endif %}
+    <form action="{{ url_for('register') }}" method="POST" onsubmit="return validateForm();">
+<!--    <form method="POST" action="{{ url_for('register') }}">-->
+      <h1>Register</h1>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name">
+      <label for="email">Email:</label>
+      <input type="text" id="email" name="email">
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username">
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password">
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" name="confirmPassword">
+      <input type="submit" value="Submit">
+      <input type="button" value="Home" onclick="location.href='{{ url_for('home') }}'">
+      <input type="button" value="Login" onclick="location.href='{{ url_for('login') }}'">
+    <br><br><br><br>
+
+    </form>
+<script>
+function validateForm() {
+  /* Get the values of the inputs */
+  var name = document.getElementById("name").value;
+  var email = document.getElementById("email").value;
+  var username = document.getElementById("username").value;
+  var password = document.getElementById("password").value;
+  var confirmPassword = document.getElementById("confirmPassword").value;
+
+  /* Check if the passwords match */
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return false;
+  }
+
+  /* Check if the email is valid */
+  if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    alert("Please enter a valid email.");
+    return false;
+  }
+
+  /* Check if all the inputs have values */
+  if (!username || !email || !name || !password || !confirmPassword) {
+    alert("Please fill in all the fields.");
+    return false;
+  }
+
+    /* Check if the password is strong enough */
+  if (password.length < 8) {
+    alert("Password must be at least 8 characters long.");
+    return false;
+  }
+  if (!/\d/.test(password)) {
+    alert("Password must contain at least one number.");
+    return false;
+  }
+  if (!/[a-z]/.test(password)) {
+    alert("Password must contain at least one lowercase letter.");
+    return false;
+  }
+  if (!/[A-Z]/.test(password)) {
+    alert("Password must contain at least one uppercase letter.");
+    return false;
+  }
+
+  /* Call the register function */
+  register(name, username, email, password, confirmPassword);
+
+<!--This code does not execute:-->
+<!--  /* Show an alert to confirm that the user has registered */-->
+<!--  alert("You have successfully registered.");-->
+
+<!--  /* Redirect to the login page */-->
+<!--  location.href = "{{ url_for('login') }}";-->
+
+  /* Return false to prevent the form from being submitted */
+  return false;
+}
+</script>
+</body>
+</html>

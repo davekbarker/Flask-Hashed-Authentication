@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name = "Author" content= "David Barker"/>
+
+  <!--  Please ensure your security is proper before implementing this, I do not claim mine is.-->
+
+  <style>
+
+  /* Add some styling to make the page look nice */
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+  }
+
+  form {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    width: 500px;
+    text-align: center;
+  }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  input[type="text"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+  }
+
+  input[type="submit"] {
+    background-color: #000000;
+    color: white;
+    padding: 20px 40px;
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+
+  /* Add hover effect for the button */
+  input[type="submit"]:hover {
+    background-color: white;
+    color: black;
+  }
+
+  /* Add styling for the new buttons */
+  input[type="button"] {
+    background-color: #000000;
+    padding-top: 10px;
+    color: white;
+    padding: 15px 30px;
+    border: 1px solid black;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 45%;
+    margin-bottom: 20px;
+    float: center;
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
+  /* Add hover effect for the new buttons */
+  input[type="button"]:hover {
+  background-color: white;
+  color: black;
+
+  </style>
+  </head>
+  <body>
+    <div class="error-message">{% if error %}{{ error }}{% endif %}</div>
+
+      <form method="POST" action="{{ url_for('login')}}" onsubmit="return validateForm();">
+        <h1>Login</h1>
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password">
+        <input type="submit" value="Submit">
+        <input type="button" value="Home" onclick="location.href='{{ url_for('home') }}'">
+        <input type="button" value="Register" onclick="location.href='{{ url_for('register') }}'">
+
+        <br><br><br><br>
+
+      </form>
+  </body>
+
+ <script>
+
+  var submitCount = 0;
+
+  function validateForm() {
+    /* Get the values of the username and password inputs */
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    /* Check if the username and password match */
+    if (!username || !password) {
+      /* Show an alert if the username or password are empty */
+      submitCount++;
+      var message = "Please enter user and password.";
+      if (submitCount >= 3) {
+        message = "Would you like to register?";
+      }
+      var response = window.confirm(message);
+
+      /* If the user chooses to register, redirect them to the register page */
+      if (response && submitCount >= 3) {
+        location.href = "{{ url_for('register') }}";
+      } else {
+        /* Reset the username and password fields */
+        document.getElementById("username").value = "";
+        document.getElementById("password").value = "";
+      }
+
+      /* Return false to prevent the form from being submitted */
+      return false;
+    }
+
+    /* Reset the submit count if the username and password match */
+    submitCount = 0;
+
+    /* Return true if the username and password match */
+    return true;
+  }
+</script>
+</html>
